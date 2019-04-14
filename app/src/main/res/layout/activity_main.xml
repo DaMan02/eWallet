@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.MainActivity">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/my_image_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        fresco:placeholderImage="@android:color/black"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:layout_centerInParent="true"
+        android:text="eWallet"
+        android:textSize="40sp"
+        android:textStyle="bold|italic"
+        android:background="#75000000"
+        android:textColor="@android:color/white"/>
+
+   <com.google.android.material.button.MaterialButton
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_alignParentBottom="true"
+       android:layout_centerHorizontal="true"
+       android:layout_marginTop="200dp"
+       android:textAppearance="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+       android:background="@color/colorPrimary"
+       android:elevation="6dp"
+       android:paddingStart="48dp"
+       android:paddingTop="16dp"
+       android:paddingEnd="48dp"
+       android:paddingBottom="16dp"
+       android:text="Login"
+       android:textAlignment="center"
+       android:textColor="@android:color/white"
+       android:textSize="20sp"
+       app:cornerRadius="26dp"
+       android:onClick="login"
+       />
+
+</RelativeLayout>
