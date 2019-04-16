@@ -14,8 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.MyViewHolder> {
 
-    public TransactionAdapter(){
-    }
 
     @NonNull
     @Override
@@ -43,7 +41,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
                 holder.currency.setText(object.getString("currency"));
 
             }
-        } catch (JSONException e) {
+        } catch (JSONException | NullPointerException e) {
             e.printStackTrace();
             Log.w("exp",e.getMessage());
         }
@@ -61,7 +59,6 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         } catch (JSONException | NullPointerException e) {
             e.printStackTrace();
         }
-
         return i;
     }
 
@@ -75,7 +72,6 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             desc = view.findViewById(R.id.desc_id);
             amt = view.findViewById(R.id.amt_id);
             currency = view.findViewById(R.id.curr_id);
-
         }
     }
 }

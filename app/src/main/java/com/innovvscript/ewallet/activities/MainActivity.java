@@ -1,25 +1,19 @@
 package com.innovvscript.ewallet.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import com.facebook.common.util.UriUtil;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.innovvscript.ewallet.R;
-import com.innovvscript.ewallet.activities.LoggedInActivity;
-import com.innovvscript.ewallet.httpsRequest.HttpsUtil;
-import com.innovvscript.ewallet.model.Request;
+import com.innovvscript.ewallet.presenter.MyPresenter;
 
-import java.io.IOException;
+public class MainActivity extends AppCompatActivity implements MyPresenter.MyView {
 
-import javax.net.ssl.HttpsURLConnection;
-
-public class MainActivity extends AppCompatActivity {
+    private MyPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,25 +28,30 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         simpleDraweeView.setImageURI(uri);
 
+        presenter = new MyPresenter(this);
+
     }
 
     public void login(View v) {
 
-        try {
-            HttpsUtil httpsUtil = new HttpsUtil(this,"login");
-            HttpsURLConnection connection = httpsUtil.getHttpsConnection("POST","login");
-            httpsUtil.connectAsync();
-            Request.setHttpsURLConnection(connection);
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e("login pressed",e.getMessage());
-        }
+        presenter.tryLogin();
 
     }
 
-    public void next(){
-        startActivity(new Intent(this, LoggedInActivity.class));
+    @Override
+    public void onGetToken() {
+        Intent intent = new Intent(this, LoggedInActivity.class);
+        startActivity(intent);
         finish();
     }
 
+    @Override
+    public void onGetBalance() {
+
+    }
+
+    @Override
+    public void onGetTransactions() {
+
+    }
 }

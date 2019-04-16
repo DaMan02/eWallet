@@ -1,12 +1,10 @@
-package com.innovvscript.ewallet.httpsRequest;
+package com.innovvscript.ewallet;
 
-
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import com.innovvscript.ewallet.activities.LoggedInActivity;
-import com.innovvscript.ewallet.activities.MainActivity;
+
 import com.innovvscript.ewallet.model.Request;
+import com.innovvscript.ewallet.presenter.MyPresenter;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.BufferedReader;
@@ -17,14 +15,13 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class HttpsUtil {
 
-    private Context context;
+    private MyPresenter presenter;
     private String action;
 
-    public HttpsUtil(Context context,String action) {
-        this.context = context;
+    public HttpsUtil(MyPresenter presenter,String action) {
+        this.presenter = presenter;
         this.action = action;
     }
-
     private static final String BASE_URL = "https://interviewer-api.herokuapp.com/";
 
     public HttpsURLConnection getHttpsConnection(String reqType,String endPoint) throws IOException {
@@ -56,19 +53,12 @@ public class HttpsUtil {
             Log.w("onPostExecute()","response:" + Request.getResponseCode());
             Log.w("onPostExecute()","body:" + Request.getResponseJson());
 
-            switch(action){
-                case "login": ((MainActivity)context).next();
-                    try {
-                        Request.setToken(Request.getResponseJson().getString("token"));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    return;
-                case "balance": ((LoggedInActivity)context).displayBalance();  return;
-                case "transactions": ((LoggedInActivity)context).next();  return;
-                case "spend": return;
-                default:   Log.w("onPostExecute()","default");
+            try {
+                presenter.executionCompleted();
+            } catch (JSONException | NullPointerException e) {
+                e.printStackTrace();
             }
+
         }
 
         @Override
@@ -76,11 +66,9 @@ public class HttpsUtil {
             try {
                 Request.getHttpsURLConnection().connect();
                 if(action.equalsIgnoreCase("transactions")) {
-                    Log.w("action",action);
-                    Request.setResponseString(getArray());
+                    presenter.gotResponseString(getArray());
                 }else {
-                    Log.w("action",action);
-                    Request.setResponseJson(getBody());
+                    presenter.gotResponseJson(getBody());
                 }
                     Request.setResponseCode(Request.getHttpsURLConnection().getResponseCode());
             } catch (IOException | JSONException e) {
@@ -95,17 +83,10 @@ public class HttpsUtil {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(Request.getHttpsURLConnection().getInputStream()));
         String json = br.readLine();
-//        Log.w("error",Request.getHttpsURLConnection().getErrorStream().toString());
-//        StringBuilder sb = new StringBuilder();
-//        String line;
-//        while ((line = br.readLine()) != null) {
-//            sb.append(line+"\n");
-//        }
-//        br.close();
         return new JSONObject(json);
     }
 
-    private String getArray() throws IOException, JSONException {
+    private String getArray() throws IOException{
         Log.w("getArray()","called");
         BufferedReader br = new BufferedReader(new InputStreamReader(Request.getHttpsURLConnection().getInputStream()));
         return br.readLine();
