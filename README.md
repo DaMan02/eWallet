@@ -1,8 +1,8 @@
 # eWallet
 
-###### HTTPS POST / GET, MVP architecture
-Login 
-See current balance 
-See transaction history
+###### HTTPS POST / GET ; MVP architecture
+1. Login 
+2. See current balance 
+3. See transaction history
 
 
